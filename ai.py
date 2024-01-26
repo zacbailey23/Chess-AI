@@ -64,3 +64,9 @@ class ChessAI:
                 best_value = move_value
                 best_move = move
         return best_move
+
+
+    def determine_best_move(self, board, depth=3):
+        # Finds the best move for the AI at a given board state
+        # 'depth' determines how many moves ahead the AI will consider
+        return self.find_best_move(board, depth)

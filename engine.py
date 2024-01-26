@@ -45,11 +45,11 @@ class ChessEngine:
         # Undoes the last move made
         if len(self.board.move_stack) > 0:
             self.board.pop()
+
+    def is_player_turn(self):
+        return self.board.turn == chess.WHITE
+
+    def get_board_state(self):
+        return self.get_board()
+
 # Testing the engine
-if __name__ == "__main__":
-    engine = ChessEngine()
-    print(engine.board)
-    print("Legal moves:", engine.list_possible_moves())
-    move_made = engine.make_move('e2e4')
-    print("Move 'e2e4' made:", move_made)
-    print(engine.board)

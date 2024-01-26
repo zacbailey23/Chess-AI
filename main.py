@@ -3,8 +3,9 @@
 # Import your chess engine and AI modules
 from engine import ChessEngine
 from ai import ChessAI
-import interface
+import chess
 # Import any other necessary modules
+
 
 def main():
     # Initialize your chess engine and AI
@@ -26,7 +27,7 @@ def main():
             engine.make_move(player_move)
         else:
             # Use the AI to determine its move
-            ai_move = ai.determine_best_move(engine.get_board_state())
+            ai_move = ai.determine_best_move(engine.get_board_state()).uci()
             engine.make_move(ai_move)
 
         # Check for end-game conditions (checkmate, stalemate, etc.)
@@ -35,17 +36,33 @@ def main():
     # Game is over - display the result (win/lose/draw)
     display_game_result(engine)
 
+
 def get_player_move():
-    # Implement function to get the player's move
-    pass
+    engine.list_possible_moves()
+    print("Your move options include ")
+    move = input("Enter your move: ")
+    return move
+
 
 def check_game_over_conditions(engine):
-    # Implement function to check if the game is over
-    pass
+    if engine.is_checkmate():
+        print("Checkmate!")
+    elif engine.is_stalemate():
+        print("Stalemate!")
+
 
 def display_game_result(engine):
-    # Implement function to display the game result
-    pass
+    result = engine.get_game_result()
+    if result == "checkmate":
+        if engine.board.turn == chess.WHITE:
+            print("Black wins by checkmate")
+        else:
+            print("White wins by checkmate")
+    elif result == "draw":
+        print("The game is a draw")
+    else:
+        print("Game is still ongoing")
+
 
 if __name__ == "__main__":
     main()
