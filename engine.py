@@ -4,6 +4,10 @@ class ChessEngine:
     def __init__(self):
         self.board = chess.Board()
 
+    def setup_start_position(self):
+        # Set up the initial position with White as the first player to move
+        self.board = chess.Board()
+
     def list_possible_moves(self):
         return list(self.board.legal_moves)
 

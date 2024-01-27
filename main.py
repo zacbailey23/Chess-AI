@@ -2,35 +2,27 @@
 from engine import ChessEngine
 from ai import ChessAI
 import chess
+from chess_gui import ChessGUI
+import tkinter as tk
+
 # Import any other necessary modules
 import os
 
 
 def main():
-    # Initialize your chess engine and AI
+
     engine = ChessEngine()
     ai = ChessAI()
-    # Set up the user interface (if you have one)
-    # This could be a command-line interface, a graphical interface, etc.
-    
-    # Main game loop
-    while not engine.is_game_over():
-        # Display the current state of the game
-        # This might be printing the board to the console, updating a GUI, etc.
-        engine.display_board()
+    engine.setup_start_position()
 
-        if engine.is_player_turn():
-            player_move = get_player_move(engine)
-            engine.make_move(player_move)
-        else:
-            # Use the AI to determine its move
-            ai_move = ai.determine_best_move(engine.get_board_state()).uci()
-            engine.make_move(ai_move)
-        # Check for end-game conditions (checkmate, stalemate, etc.)
-        check_game_over_conditions(engine)
+    # Initialize the root Tkinter window
+    root = tk.Tk()
 
-    # Game is over - display the result (win/lose/draw)
-    display_game_result(engine)
+    # Create an instance of ChessGUI, passing the engine and root window
+    app = ChessGUI(root, engine, ai)
+
+    # Start the Tkinter event loop
+    root.mainloop()
 
 def check_game_over_conditions(engine):
     if engine.is_checkmate():
