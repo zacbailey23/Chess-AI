@@ -1,6 +1,6 @@
 import chess
 import random
-
+import chess.polyglot
 class ChessAI:
     def __init__(self):
         pass
@@ -54,17 +54,46 @@ class ChessAI:
             return min_eval
 
     def find_best_move(self, board, depth):
+        piece_symbols = {
+            chess.PAWN: 'Pawn',
+            chess.KNIGHT: 'Knight',
+            chess.BISHOP: 'Bishop',
+            chess.ROOK: 'Rook',
+            chess.QUEEN: 'Queen',
+            chess.KING: 'King'
+        }
+        try:
+            with chess.polyglot.open_reader("./Data/baronbook30/baron30.bin") as reader:
+                for entry in reader.find_all(board):
+                    print(f"Using opening book move: {entry.move.uci()} with weight {entry.weight}")
+                    return entry.move
+        except IOError as e:
+            print(f"Error opening book: {e}")  # Debug print
+
         best_move = chess.Move.null()
         best_value = float('-inf')
-        for move in board.legal_moves:
+        alpha = float('-inf')
+        beta = float('inf')
+
+        # Sort moves heuristically for better pruning
+        sorted_moves = self.sort_moves(board, board.legal_moves)
+
+        for move in sorted_moves:
             board.push(move)
-            move_value = self.minimax(board, depth-1, float('-inf'), float('inf'), False)
+            move_value = self.minimax(board, depth-1, alpha, beta, False)
             board.pop()
             if move_value > best_value:
                 best_value = move_value
                 best_move = move
+            alpha = max(alpha, move_value)
+
         return best_move
 
+    def sort_moves(self, board, moves):
+        # A simple, heuristic move ordering
+        captures = [move for move in moves if board.is_capture(move)]
+        others = [move for move in moves if not board.is_capture(move)]
+        return captures + others  # Prioritize captures
 
     def determine_best_move(self, board, depth=3):
         # Finds the best move for the AI at a given board state

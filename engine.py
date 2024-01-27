@@ -18,6 +18,7 @@ class ChessEngine:
         except ValueError:
             return False
 
+
     def is_checkmate(self):
         return self.board.is_checkmate()
 
@@ -51,5 +52,16 @@ class ChessEngine:
 
     def get_board_state(self):
         return self.get_board()
+
+    def display_board(self):
+        # This method uses python-chess's built-in __str__() method which prints
+        # the board in a simple text format. We're going to add ranks and files for clarity.
+        board_str = str(self.board).split('\n')
+        print('  +--------------------------------+')
+        for rank in range(1, 9):
+            print(f'{9 - rank} | ' + ' '.join(board_str[rank - 1]) + ' |')
+        print('  +--------------------------------+')
+        print('    a   b   c   d   e   f   g   h  ')
+
 
 # Testing the engine
